@@ -40,9 +40,10 @@ namespace webapi.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("")]
-        public async Task<ResponseModel> GetAllAntiquesClass()
+        public async Task<ResponseModel> GetAllAntiquesClass(string parentId)
         {
-            var result = await _iAntiquesClassService.GetListAntiquesClassAsync();
+            if (string.IsNullOrEmpty(parentId)) parentId = "";
+            var result = await _iAntiquesClassService.GetListAntiquesClassAsync(parentId);
             return Success(result);
         }
 

@@ -17,6 +17,6 @@ namespace EmergencyAccount.Application
 
         Task UpdateAntiquesClassAsync(EntityAntiquesClass entityAntiquesClass);
 
-        Task<List<EntityAntiquesClass>> GetListAntiquesClassAsync();
+        Task<List<EntityAntiquesClass>> GetListAntiquesClassAsync(string parentId);
     }
 }

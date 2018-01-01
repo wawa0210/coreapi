@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using CommonLib;
 using DataAccess;
+using DataAccess.BaseQuery;
 using EmergencyAccount.Etity;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,11 +45,11 @@ namespace EmergencyAccount.Application
             return Mapper.Map<TableAntiquesClass, EntityAntiquesClass>(result);
         }
 
-        public async Task<List<EntityAntiquesClass>> GetListAntiquesClassAsync()
+        public async Task<List<EntityAntiquesClass>> GetListAntiquesClassAsync(string parentId)
         {
             var result = await _context.MuseumAntiquesClass.ToListAsync();
 
-            return Mapper.Map<List<TableAntiquesClass>, List<EntityAntiquesClass>>(result);
+            return Mapper.Map<List<TableAntiquesClass>, List<EntityAntiquesClass>>(result.FindAll(x => x.ParentId == parentId).OrderBy(x => x.HotLevel).ThenByDescending(x => x.CreateTime).ToList());
 
         }
 
