@@ -15,5 +15,7 @@ namespace DataAccess
         public DbSet<TableAntiquesClass> MuseumAntiquesClass { get; set; }
 
         public DbSet<TableMuseum> Museums { get; set; }
+        public DbSet<TableAntiques> Antiques { get; set; }
+        public DbSet<TableAntiquesImg> AntiquesImg { get; set; }
     }
 }

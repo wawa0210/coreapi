@@ -52,6 +52,8 @@ namespace webapi.Model
         #endregion
 
         [Description("文物分类不正确(必须指定父级分类)")]
-        AntiquesClassError = 8008
+        AntiquesClassError = 8008,
+        [Description("该大分类下已存在同名文物")]
+        AntiquesRepeat = 8009
     }
 }
