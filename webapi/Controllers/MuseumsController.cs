@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EmergencyAccount.Application;
 using EmergencyAccount.Etity;
+using EmergencyAccount.Etity.Dto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using webapi.Controllers.Base;
@@ -27,9 +28,9 @@ namespace webapi.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("")]
-        public async Task<ResponseModel> GetAllMuseums()
+        public async Task<ResponseModel> GetPageMuseums(EntityMuseumSearch entityMuseumSearch)
         {
-            var result = await _museumService.GetAllMuseumAsync();
+            var result = await _museumService.GetPageMuseumAsync(entityMuseumSearch);
             return Success(result);
         }
 

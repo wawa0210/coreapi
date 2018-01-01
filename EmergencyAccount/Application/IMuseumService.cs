@@ -1,4 +1,6 @@
-﻿using EmergencyAccount.Etity;
+﻿using DataAccess.BaseQuery;
+using EmergencyAccount.Etity;
+using EmergencyAccount.Etity.Dto;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,7 +10,7 @@ namespace EmergencyAccount.Application
 {
     public interface IMuseumService
     {
-        Task<List<EntityMuseum>> GetAllMuseumAsync();
+        Task<PageBase<EntityMuseum>> GetPageMuseumAsync(EntityMuseumSearch entityMuseumSearch);
 
         Task AddMuseumAsync(EntityMuseum entityMuseum);
 
