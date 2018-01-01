@@ -11,7 +11,7 @@ using webapi.Model;
 
 namespace webapi.Controllers
 {
-    [Route("v0/api/museums")]
+    [Route("v0/museums")]
     public class MuseumsController : BaseApiController
     {
         private readonly IMuseumService _museumService;

@@ -48,8 +48,10 @@ namespace webapi.Model
         UserIsNull = 8006,
 
         [Description("用户密码不正确")]
-        UserPwdCheckFaild = 8007
+        UserPwdCheckFaild = 8007,
         #endregion
 
+        [Description("文物分类不正确(必须指定父级分类)")]
+        AntiquesClassError = 8008
     }
 }

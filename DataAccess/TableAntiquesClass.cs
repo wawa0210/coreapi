@@ -43,7 +43,7 @@ namespace DataAccess
         }
 
         /// <summary>
-        /// 分类登记: 
+        /// 分类等级: 
         /// </summary>
         [Column("ClassLevel")]
         [Description("")]
@@ -52,7 +52,16 @@ namespace DataAccess
             get;
             set;
         }
-
+        /// <summary>
+        /// 分类等级: 
+        /// </summary>
+        [Column("HotLevel")]
+        [Description("")]
+        public int HotLevel
+        {
+            get;
+            set;
+        }
         /// <summary>
         /// 父编号: 
         /// </summary>

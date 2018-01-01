@@ -96,6 +96,7 @@ namespace webapi
             // It was then registered with Autofac using the Populate method in ConfigureServices.
             builder.Register(c => new AccountService(c.Resolve<EfDbContext>())).As<IAccountService>().InstancePerLifetimeScope();
             builder.Register(c => new MuseumService(c.Resolve<EfDbContext>())).As<IMuseumService>().InstancePerLifetimeScope();
+            builder.Register(c => new AntiquesClassService(c.Resolve<EfDbContext>())).As<IAntiquesClassService>().InstancePerLifetimeScope();
         }
     }
 
