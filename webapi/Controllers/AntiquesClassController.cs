@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using EmergencyAccount.Application;
 using EmergencyAccount.Enum;
 using EmergencyAccount.Etity;
+using EmergencyAccount.Etity.Dto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using webapi.Controllers.Base;
@@ -40,10 +41,9 @@ namespace webapi.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("")]
-        public async Task<ResponseModel> GetAllAntiquesClass(string parentId)
+        public async Task<ResponseModel> GetPageAntiquesClass(EntityAntiquesClassSearch entityAntiquesClassSearch)
         {
-            if (string.IsNullOrEmpty(parentId)) parentId = "";
-            var result = await _iAntiquesClassService.GetListAntiquesClassAsync(parentId);
+            var result = await _iAntiquesClassService.GetPageAntiquesClassAsync(entityAntiquesClassSearch);
             return Success(result);
         }
 

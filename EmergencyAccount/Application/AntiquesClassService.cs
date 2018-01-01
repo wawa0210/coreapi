@@ -9,6 +9,7 @@ using CommonLib;
 using DataAccess;
 using DataAccess.BaseQuery;
 using EmergencyAccount.Etity;
+using EmergencyAccount.Etity.Dto;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmergencyAccount.Application
@@ -29,7 +30,7 @@ namespace EmergencyAccount.Application
                 Title = entityAntiquesClass.Title,
                 IsEnable = entityAntiquesClass.IsEnable,
                 Description = entityAntiquesClass.Description,
-                ParentId = entityAntiquesClass.ParentId,
+                ParentId = string.IsNullOrEmpty(entityAntiquesClass.ParentId) ? "0" : entityAntiquesClass.ParentId,
                 Remark = entityAntiquesClass.Remark,
                 HotLevel = entityAntiquesClass.HotLevel,
                 CreateTime = DateTime.Now,
@@ -45,11 +46,19 @@ namespace EmergencyAccount.Application
             return Mapper.Map<TableAntiquesClass, EntityAntiquesClass>(result);
         }
 
-        public async Task<List<EntityAntiquesClass>> GetListAntiquesClassAsync(string parentId)
+        public async Task<PageBase<EntityAntiquesClass>> GetPageAntiquesClassAsync(EntityAntiquesClassSearch entityAntiquesClassSearch)
         {
-            var result = await _context.MuseumAntiquesClass.ToListAsync();
-
-            return Mapper.Map<List<TableAntiquesClass>, List<EntityAntiquesClass>>(result.FindAll(x => x.ParentId == parentId).OrderBy(x => x.HotLevel).ThenByDescending(x => x.CreateTime).ToList());
+            var result = new PageBase<EntityAntiquesClass>
+            {
+                CurrentPage = entityAntiquesClassSearch.CurrentPage,
+                PageSize = entityAntiquesClassSearch.PageSize
+            };
+            var queryExpression = GetPageExpression(entityAntiquesClassSearch);
+            result.TotalCounts = await _context.MuseumAntiquesClass.CountAsync(queryExpression);
+            var data = await _context.Set<TableAntiquesClass>().Where(queryExpression).OrderByDescending(x => x.CreateTime).Skip(entityAntiquesClassSearch.PageSize * (entityAntiquesClassSearch.CurrentPage - 1)).Take(entityAntiquesClassSearch.PageSize).ToListAsync();
+            result.Items = Mapper.Map<List<TableAntiquesClass>, List<EntityAntiquesClass>>(data);
+            result.TotalPages = Convert.ToInt32(Math.Ceiling(result.TotalCounts / (entityAntiquesClassSearch.PageSize * 1.0)));
+            return result;
 
         }
 
@@ -59,10 +68,29 @@ namespace EmergencyAccount.Application
             model.IsEnable = entityAntiquesClass.IsEnable;
             model.Title = entityAntiquesClass.Title;
             model.Description = entityAntiquesClass.Description;
-            model.ParentId = entityAntiquesClass.ParentId;
+            model.ParentId = string.IsNullOrEmpty(entityAntiquesClass.ParentId) ? "0" : entityAntiquesClass.ParentId;
             model.Remark = entityAntiquesClass.Remark;
             _context.MuseumAntiquesClass.Update(model);
             await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// 获得搜索表达式树
+        /// </summary>
+        /// <param name="entityAntiquesSearch"></param>
+        /// <returns></returns>
+        private Expression<Func<TableAntiquesClass, bool>> GetPageExpression(EntityAntiquesClassSearch entityAntiquesClassSearch)
+        {
+            Expression<Func<TableAntiquesClass, bool>> pageExpression = x => x.IsEnable == true;
+
+            if (!string.IsNullOrEmpty(entityAntiquesClassSearch.Name))
+            {
+                Expression<Func<TableAntiquesClass, bool>> nameExpression = x => x.Title.Contains(entityAntiquesClassSearch.Name);
+                pageExpression = pageExpression.And(nameExpression);
+            }
+            Expression<Func<TableAntiquesClass, bool>> realExpression = x => x.ParentId == (string.IsNullOrEmpty(entityAntiquesClassSearch.ParentId) ? "0" : entityAntiquesClassSearch.ParentId);
+            pageExpression = pageExpression.And(realExpression);
+            return pageExpression;
         }
     }
 }

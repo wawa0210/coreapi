@@ -1,4 +1,6 @@
-﻿using EmergencyAccount.Etity;
+﻿using DataAccess.BaseQuery;
+using EmergencyAccount.Etity;
+using EmergencyAccount.Etity.Dto;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,6 +19,6 @@ namespace EmergencyAccount.Application
 
         Task UpdateAntiquesClassAsync(EntityAntiquesClass entityAntiquesClass);
 
-        Task<List<EntityAntiquesClass>> GetListAntiquesClassAsync(string parentId);
+        Task<PageBase<EntityAntiquesClass>> GetPageAntiquesClassAsync(EntityAntiquesClassSearch entityAntiquesClassSearch);
     }
 }
