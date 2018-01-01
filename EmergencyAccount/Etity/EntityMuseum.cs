@@ -10,6 +10,12 @@ namespace EmergencyAccount.Etity
     /// </summary>
     public class EntityMuseum
     {
+        public EntityMuseum()
+        {
+            IsEnable = true;
+            CreateTime = DateTime.Now;
+            Remark = "";
+        }
         /// <summary>
         /// 属性: 
         /// </summary>
@@ -22,7 +28,7 @@ namespace EmergencyAccount.Etity
         /// <summary>
         /// 名称: 
         /// </summary>
-        [Required(ErrorMessage = "用户名不能为空")]
+        [Required(ErrorMessage = "名称不能为空")]
         public string Name
         {
             get;

@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using EmergencyAccount.Application;
+using webapi.Framework;
 
 namespace webapi
 {
@@ -36,6 +37,8 @@ namespace webapi
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            MapperInit.InitMapping();
+
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
             app.UseMiddleware<ErrorWrappingMiddleware>();
@@ -92,6 +95,7 @@ namespace webapi
             // The generic ILogger<TCategoryName> service was added to the ServiceCollection by ASP.NET Core.
             // It was then registered with Autofac using the Populate method in ConfigureServices.
             builder.Register(c => new AccountService(c.Resolve<EfDbContext>())).As<IAccountService>().InstancePerLifetimeScope();
+            builder.Register(c => new MuseumService(c.Resolve<EfDbContext>())).As<IMuseumService>().InstancePerLifetimeScope();
         }
     }
 

@@ -11,7 +11,7 @@ using webapi.Model;
 
 namespace webapi.Controllers
 {
-    [Route("api/museums")]
+    [Route("v0/api/museums")]
     public class MuseumsController : BaseApiController
     {
         private readonly IMuseumService _museumService;
@@ -39,7 +39,7 @@ namespace webapi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("")]
-        public async Task<ResponseModel> AddMuseums(EntityMuseum entityMuseum)
+        public async Task<ResponseModel> AddMuseums([FromBody]EntityMuseum entityMuseum)
         {
             await _museumService.AddMuseumAsync(entityMuseum);
             return Success("保存成功");

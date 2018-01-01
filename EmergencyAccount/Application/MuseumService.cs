@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using CommonLib;
 using DataAccess;
 using EmergencyAccount.Etity;
@@ -39,8 +40,7 @@ namespace EmergencyAccount.Application
         public async Task<List<EntityMuseum>> GetAllMuseumAsync()
         {
             var result = await _context.Museums.ToListAsync();
-            //return result.FindAll(x => x.IsEnable);
-            return null;
+            return Mapper.Map<List<TableMuseum>, List<EntityMuseum>>(result.FindAll(x => x.IsEnable));
         }
     }
 }
