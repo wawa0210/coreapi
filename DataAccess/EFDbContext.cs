@@ -11,6 +11,9 @@ namespace DataAccess
         {
 
         }
-        public DbSet<MscAccount> MscAccount { get; set; }
+        public DbSet<TableAccountManager> AccountManagerData { get; set; }
+        public DbSet<TableAntiquesClass> MuseumAntiquesClass { get; set; }
+
+        public DbSet<TableMuseum> Museums { get; set; }
     }
 }

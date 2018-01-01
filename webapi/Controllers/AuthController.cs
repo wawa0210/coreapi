@@ -6,27 +6,55 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.ComponentModel.DataAnnotations;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Security.Claims;
+using Microsoft.Extensions.Configuration;
+using webapi.Model;
+using EmergencyAccount.Etity;
+using EmergencyAccount.Application;
+using webapi.Controllers.Base;
+using CommonLib;
+using Newtonsoft.Json;
+using System.IO;
+using System.Net.Http;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Drawing;
 
 namespace webapi.Controllers
 {
-    [Produces("application/json")]
     [Route("v0/auth")]
-    public class AuthController : Controller
+    public class AuthController : BaseApiController
     {
+        private readonly IAccountService _accountService;
+
+        public AuthController(IAccountService accountService)
+        {
+            _accountService = accountService;
+        }
+
         /// <summary>
-        /// 获得店铺所有信息
+        /// 获得token 登录
         /// </summary>
         /// <returns></returns>
-        [HttpPost, Route("token")]
+        [HttpPost]
         [AllowAnonymous]
-        public async Task<string> RequestToken([FromBody]TokenRequest request)
+        [Route("token")]
+        public async Task<ResponseModel> GetAccountAuth([FromBody]EntityLoginModel loginModel)
         {
-            //var result = await "";
-            if (ModelState.IsValid)
+            var result = await _accountService.GetAccountManagerSync(loginModel.UserName);
+
+            if (result == null) return Fail(ErrorCodeEnum.UserIsNull);
+
+            var checkResult = _accountService.CheckLoginInfo(loginModel.UserPwd, result.UserSalt, result.UserPwd);
+            if (!checkResult) return Fail(ErrorCodeEnum.UserPwdCheckFaild);
+            return Success(new
             {
-                return "";
-            }
-            return "false";
+                token = AesHelper.Encrypt(JsonConvert.SerializeObject(result)),
+                userInfo = result
+            });
         }
     }
 
@@ -35,7 +63,7 @@ namespace webapi.Controllers
         [Required(ErrorMessage = "店铺编号不能为空")]
         public int AccId
         {
-            get;set;
+            get; set;
         }
     }
 }

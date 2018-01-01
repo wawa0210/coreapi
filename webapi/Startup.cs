@@ -11,50 +11,65 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using DataAccess;
 using Autofac;
-using IService;
-using Service;
 using webapi.Framework.Middlewares;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using EmergencyAccount.Application;
 
 namespace webapi
 {
     public class Startup
     {
-
-        public Startup(IHostingEnvironment env)
+        public Startup(IHostingEnvironment env, IConfiguration configuration)
         {
             var builder = new ConfigurationBuilder()
                .SetBasePath(env.ContentRootPath)
                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                .AddEnvironmentVariables();
             Configuration = builder.Build();
+            ConfigurationNew = configuration;
         }
         public IConfigurationRoot Configuration { get; private set; }
 
+        public IConfiguration ConfigurationNew { get; set; }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(this.Configuration.GetSection("Logging"));
+            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+            app.UseMiddleware<ErrorWrappingMiddleware>();
 
-            //app.UseMiddleware<VisitLogMiddleware>();
-
+            app.UseCors(builder => builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
             app.UseMvc();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddEntityFrameworkSqlServer().AddDbContext<EfDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SqlServer")));
-            // Add framework services.
+
+            services.AddEntityFrameworkSqlServer().AddDbContext<EfDbContext>(options => options.UseMySQL(Configuration.GetConnectionString("SqlServer")));
             services.AddApplicationInsightsTelemetry(Configuration);
-            //services.AddScoped<ValidateModelMiddleware>();
-            services.AddMvc(options => options.MaxModelValidationErrors = 5);
             services.AddMvc(options =>
             {
                 options.Filters.Add(typeof(ValidateModelMiddleware));
                 options.RespectBrowserAcceptHeader = true;
-            }
-                );
+            });
+
+            services.AddAuthentication().AddJwtBearer(cfg =>
+            {
+                cfg.RequireHttpsMetadata = false;
+                cfg.SaveToken = true;
+                cfg.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidIssuer = Configuration["Tokens:Issuer"],
+                    ValidAudience = Configuration["Tokens:Issuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"]))
+                };
+            });
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

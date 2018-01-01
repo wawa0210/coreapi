@@ -14,11 +14,6 @@ namespace webapi.Framework.Middlewares
         {
             if (!context.ModelState.IsValid)
             {
-                context.Result = new BadRequestObjectResult(context.ModelState);
-
-
-                context.Result = new BadRequestObjectResult(context.ModelState);
-
                 var errorFieldsAndMsgs = context.ModelState.Where(m => m.Value.Errors.Any())
                  .Select(x => new { x.Key, x.Value.Errors });
 

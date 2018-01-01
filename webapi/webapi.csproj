@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Img\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -17,6 +18,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Antiforgery" Version="2.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.1" />
+    <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="6.10.5" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,9 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CommonLib\CommonLib.csproj" />
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
-    <ProjectReference Include="..\IService\IService.csproj" />
-    <ProjectReference Include="..\Service\Service.csproj" />
+    <ProjectReference Include="..\EmergencyAccount\EmergencyAccount.csproj" />
   </ItemGroup>
 
 </Project>
