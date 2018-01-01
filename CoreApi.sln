@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmergencyAccount", "Emergen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonLib", "CommonLib\CommonLib.csproj", "{330D1E33-8898-43BA-974F-32D3C4601CDA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Datalayer", "Datalayer", "{EB267C8C-AACA-4F60-B514-A08D9E9E805B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Commonlayer", "Commonlayer", "{CFD85F47-CE55-4251-AC88-ED5264CD364A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,7 +44,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{6402B7EF-B608-4007-B1C5-34A5EAD5234C} = {EB267C8C-AACA-4F60-B514-A08D9E9E805B}
 		{BFE57B4B-5636-4451-B8D8-7A18480C2EAF} = {48E6D402-55C7-49E3-904B-CD2B485C3E63}
+		{330D1E33-8898-43BA-974F-32D3C4601CDA} = {CFD85F47-CE55-4251-AC88-ED5264CD364A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5B90A978-F41B-4214-BECE-2EE7C33FAB7C}
