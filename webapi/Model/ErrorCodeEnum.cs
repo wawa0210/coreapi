@@ -54,6 +54,8 @@ namespace webapi.Model
         [Description("文物分类不正确(必须指定父级分类)")]
         AntiquesClassError = 8008,
         [Description("该大分类下已存在同名文物")]
-        AntiquesRepeat = 8009
+        AntiquesRepeat = 8009,
+        [Description("标识不能为空")]
+        IdentifyIsNull = 8010
     }
 }

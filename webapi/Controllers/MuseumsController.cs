@@ -35,7 +35,7 @@ namespace webapi.Controllers
         }
 
         /// <summary>
-        /// 获得所有博物馆信息
+        /// 新增所有博物馆信息
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -44,6 +44,32 @@ namespace webapi.Controllers
         {
             await _museumService.AddMuseumAsync(entityMuseum);
             return Success("保存成功");
+        }
+        
+        /// <summary>
+        /// 编辑博物馆信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("")]
+        public async Task<ResponseModel> EditMuseums([FromBody]EntityMuseum entityMuseum)
+        {
+            if (string.IsNullOrEmpty(entityMuseum.Id)) return Fail(ErrorCodeEnum.IdentifyIsNull);
+            await _museumService.EditMuseumAsync(entityMuseum);
+            return Success("保存成功");
+        }
+
+        /// <summary>
+        /// 编辑博物馆信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("delete/{id}")]
+        public async Task<ResponseModel> EditMuseums(string id)
+        {
+            if (string.IsNullOrEmpty(id)) return Fail(ErrorCodeEnum.IdentifyIsNull);
+            await _museumService.DisableMuseumAsync(id);
+            return Success("删除成功");
         }
     }
 }

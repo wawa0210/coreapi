@@ -32,12 +32,18 @@ namespace EmergencyAccount.Application
             await _context.SaveChangesAsync();
         }
 
+        public async Task DisableMuseumAsync(string id)
+        {
+            var model = await _context.Museums.FirstAsync(x => x.Id == id);
+            model.IsEnable =false;
+            await _context.SaveChangesAsync();
+        }
+
         public async Task EditMuseumAsync(EntityMuseum entityMuseum)
         {
             var model = await _context.Museums.FirstAsync(x => x.Id == entityMuseum.Id);
-            model.IsEnable = entityMuseum.IsEnable;
+            //model.IsEnable = entityMuseum.IsEnable;
             model.Name = entityMuseum.Name;
-            _context.Museums.Update(model);
             await _context.SaveChangesAsync();
         }
 

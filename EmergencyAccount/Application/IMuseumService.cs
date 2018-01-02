@@ -15,5 +15,6 @@ namespace EmergencyAccount.Application
         Task AddMuseumAsync(EntityMuseum entityMuseum);
 
         Task EditMuseumAsync(EntityMuseum entityMuseum);
+        Task DisableMuseumAsync(string id);
     }
 }
