@@ -18,6 +18,7 @@ namespace EmergencyAccount.Application
         Task AddAntiquesClassAsync(EntityAntiquesClass entityAntiquesClass);
 
         Task UpdateAntiquesClassAsync(EntityAntiquesClass entityAntiquesClass);
+        Task DisAbleClassAsync(string id);
 
         Task<PageBase<EntityAntiquesClass>> GetPageAntiquesClassAsync(EntityAntiquesClassSearch entityAntiquesClassSearch);
     }

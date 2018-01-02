@@ -48,6 +48,18 @@ namespace webapi.Controllers
         }
 
         /// <summary>
+        /// 获得所有博物馆分类信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("delete/{id}")]
+        public async Task<ResponseModel> DisableAntiquesClass(string id)
+        {
+             await _iAntiquesClassService.DisAbleClassAsync(id);
+            return Success("删除成功");
+        }
+
+        /// <summary>
         /// 更新所有博物馆分类信息
         /// </summary>
         /// <returns></returns>

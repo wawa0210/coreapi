@@ -8,6 +8,7 @@ using AutoMapper;
 using CommonLib;
 using DataAccess;
 using DataAccess.BaseQuery;
+using EmergencyAccount.Enum;
 using EmergencyAccount.Etity;
 using EmergencyAccount.Etity.Dto;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +37,36 @@ namespace EmergencyAccount.Application
                 CreateTime = DateTime.Now,
             };
             await _context.MuseumAntiquesClass.AddAsync(model);
+            await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// 禁用分类
+        /// </summary>
+        /// <param name="entityAntiquesClass"></param>
+        /// <returns></returns>
+        public async Task DisAbleClassAsync(string id)
+        {
+            var classInfo = await _context.MuseumAntiquesClass.FirstOrDefaultAsync(x => x.Id == id);
+            var classLevel = classInfo.ParentId == "0" ? 1 : 2;
+            var listClass = new List<TableAntiquesClass>();
+            var listAntiques = new List<TableAntiques>();
+            if (classLevel == (int)EnumAntiquesClassLevel.MainLevel)
+            {
+                listClass = await _context.MuseumAntiquesClass.Where(x => x.Id == id || x.ParentId == id).ToListAsync();
+                listAntiques = await _context.Antiques.Where(x => x.MaxClassId == id).ToListAsync();
+            }
+            else
+            {
+                listAntiques = await _context.Antiques.Where(x => x.MinClassId == id).ToListAsync();
+                listClass.Add(classInfo);
+            }
+            listClass.ForEach(x => { x.IsEnable = false; x.Remark = "手动删除"; });
+            listAntiques.ForEach(x => { x.IsEnable = false; x.Remark = "手动删除"; });
+
+            _context.MuseumAntiquesClass.UpdateRange(listClass);
+            _context.Antiques.UpdateRange(listAntiques);
+
             await _context.SaveChangesAsync();
         }
 
